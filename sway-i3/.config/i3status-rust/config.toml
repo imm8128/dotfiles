@@ -1,0 +1,23 @@
+[[block]]
+block = "backlight"
+
+[[block]]
+block = "battery"
+
+[[block]]
+block = "cpu"
+
+[[block]]
+block = "disk_space"
+
+[[block]]
+block = "memory"
+
+[[block]]
+block = "net"
+
+[[block]]
+block = "sound"
+
+[[block]]
+block = "time"

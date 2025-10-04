@@ -1,0 +1,12 @@
+[user]
+	email = ilkhomovmukhammad8128@gmail.com
+	name = Mukhammad Ilkhomov
+	signingKey = 6664108AF618B289
+[pull]
+	rebase = no
+[gpg]
+	program = gpg
+[commit]
+	gpgsign = true
+[init]
+	defaultBranch = main
