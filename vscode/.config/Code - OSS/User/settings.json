@@ -6,5 +6,6 @@
          "before": ["j", "j"],
          "after": ["<esc>"]
      }
-    ]
+    ],
+    "dart.flutterSdkPath": "/home/admin1475963/Applications/flutter"
 }
