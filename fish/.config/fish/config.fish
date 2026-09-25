@@ -1,4 +1,4 @@
-alias l 'exa -la --icons'
-alias ls 'exa -a --icons'
+alias l 'eza -la --icons=auto'
+alias ls 'eza -a --icons=auto'
 
 starship init fish | source
