@@ -31,7 +31,7 @@ let mapleader=" "
 let maplocalleader = " "
 nnoremap <SPACE> <Nop>
 
-nnoremap <leader>tn :tabnew<Enter> 
+nnoremap <leader>tn :tabnew<Enter>
 nnoremap <leader>tc :tabclose<Enter>
 nnoremap <leader>tl :tabnext<Enter>
 nnoremap <leader>th :tabprevious<Enter>
@@ -40,10 +40,10 @@ nnoremap <leader>r :source $MYVIMRC<Enter>
 
 nnoremap <leader>ws :split<Enter>
 nnoremap <leader>wv :vsplit<Enter>
-nnoremap <leader>wh <C-w>h<Enter>
-nnoremap <leader>wj <C-w>j<Enter>
-nnoremap <leader>wk <C-w>k<Enter>
-nnoremap <leader>wl <C-w>l<Enter>
+nnoremap <leader>wh <C-w>h
+nnoremap <leader>wj <C-w>j
+nnoremap <leader>wk <C-w>k
+nnoremap <leader>wl <C-w>l
 nnoremap <leader>wc :q<Enter>
 
 nnoremap <leader>e :e

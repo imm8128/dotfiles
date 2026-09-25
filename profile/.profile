@@ -1,4 +1,14 @@
-export PATH="$HOME/.local/bin:$PATH"
+add_path() {
+    case ":$PATH:" in
+        *":$1:"*) ;;
+        *) export PATH="$1:$PATH" ;;
+    esac
+}
+
+add_path "$HOME/.local/bin"
+add_path "$HOME/Applications/flutter/bin"
+unset -f add_path
+
 export EDITOR="nvim"
 
 export XDG_CONFIG_HOME="$HOME/.config"
