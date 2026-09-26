@@ -14,7 +14,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 | `fish`      | fish shell with `eza` aliases, `vim` → `nvim`, starship and fzf keys |
 | `gh`        | GitHub CLI settings and aliases (not `hosts.yml`, which holds the token) |
 | `git`       | Git identity, GPG commit signing, global ignore file            |
-| `kde`       | `kde-setup` script: taskbar apps on Meta+1…9, windows open maximized, 50/50 split only |
+| `kde`       | `kde-setup` script: Breeze Dark, Meta+1…9 app shortcuts, maximized windows, 50/50 split, keyboard layouts |
 | `kanata`    | Keyboard remapping: Caps Lock is Esc on tap, special layer on hold |
 | `neovim`    | Neovim with onedark; vim-plug installs itself on first start    |
 | `pacman`    | Per-user `makepkg.conf` overrides (no debug packages, LTO)      |

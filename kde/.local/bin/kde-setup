@@ -1,7 +1,8 @@
 #!/bin/bash
 # Apply KDE Plasma settings that live in state files rather than clean config:
-# taskbar apps with Meta+1..9, windows maximized by default, and the
-# half-screen split as the only tiling layout. Safe to re-run.
+# the Breeze Dark theme, default terminal, file dialog view, taskbar apps with
+# Meta+1..9, windows maximized by default, the half-screen split as the only
+# tiling layout, and keyboard input. Safe to re-run.
 set -euo pipefail
 
 # Pinned taskbar apps, in order. Meta+1 activates the first one and launches it
@@ -16,7 +17,8 @@ LAUNCHERS=(
 
 # Qt key codes for kglobalaccel.
 META=$((0x10000000))
-KEY_UP=$((0x01000013))
+KEY_M=$((0x4D))
+KEY_PGUP=$((0x01000016))
 
 set_shortcut() {  # component, action, key codes...
     local keys=""
@@ -25,6 +27,18 @@ set_shortcut() {  # component, action, key codes...
         --method org.kde.KGlobalAccel.setForeignShortcutKeys \
         "['$1', '$2', '', '']" "@a(ai) [${keys%, }]" >/dev/null
 }
+
+# Global theme: Breeze Dark (colors, window decorations, icons, cursor). Leaves
+# the panel and desktop layout alone.
+plasma-apply-lookandfeel --apply org.kde.breezedark.desktop >/dev/null
+
+# Default terminal, used by Dolphin's "Open Terminal" and other KDE apps.
+kwriteconfig6 --file kdeglobals --group General --key TerminalApplication alacritty
+kwriteconfig6 --file kdeglobals --group General --key TerminalService Alacritty.desktop
+
+# Open/save dialogs show hidden files in the detailed tree view.
+kwriteconfig6 --file kdeglobals --group "KFileDialog Settings" --key "Show hidden files" true
+kwriteconfig6 --file kdeglobals --group "KFileDialog Settings" --key "View Style" DetailTree
 
 # Taskbar launchers.
 js_list=$(printf '"applications:%s",' "${LAUNCHERS[@]}")
@@ -41,11 +55,28 @@ for i in {1..9}; do
     set_shortcut plasmashell "activate task manager entry $i" $((META + 0x30 + i))
 done
 
-# Two layouts only: Meta+Up maximizes, Meta+Left/Right tile to halves (KDE
-# default). Top/bottom tiling is unbound.
-set_shortcut kwin "Window Maximize" $((META + KEY_UP)) $((0x08000000 + 0x4D)) $((META + 0x01000016))
+# Two layouts only: Meta+M (and the default Meta+PgUp) maximizes, Meta+Left/Right
+# tile to halves (KDE default). Top/bottom tiling is unbound, so Meta+Up and
+# Meta+Down do nothing.
+set_shortcut kwin "Window Maximize" $((META + KEY_M)) $((META + KEY_PGUP))
 set_shortcut kwin "Window Quick Tile Top"
 set_shortcut kwin "Window Quick Tile Bottom"
+
+# Input: us, ru and uz layouts, and NumLock on at login (0 = on, 1 = off,
+# 2 = leave unchanged).
+kwriteconfig6 --file kxkbrc --group Layout --key Use true
+kwriteconfig6 --file kxkbrc --group Layout --key LayoutList us,ru,uz
+kwriteconfig6 --file kcminputrc --group Keyboard --key NumLock 0
+dbus-send --session --type=signal /Layouts org.kde.keyboard.reloadConfig
+sleep 1  # let KWin register the per-layout shortcut actions
+
+# Keyboard layouts: Meta+Space cycles, Meta+Ctrl+Alt+Shift+A/S/D pick one directly.
+HYPER=$((META + 0x04000000 + 0x08000000 + 0x02000000))
+layouts="KDE Keyboard Layout Switcher"
+set_shortcut "$layouts" "Switch to Next Keyboard Layout" $((META + 0x20))
+set_shortcut "$layouts" "Switch keyboard layout to English (US)" $((HYPER + 0x41))
+set_shortcut "$layouts" "Switch keyboard layout to Russian" $((HYPER + 0x53))
+set_shortcut "$layouts" "Switch keyboard layout to Uzbek" $((HYPER + 0x44))
 
 # New normal windows open maximized. Dialogs keep their own size.
 rule=maximize-by-default
