@@ -1,0 +1,75 @@
+#!/bin/bash
+# Apply KDE Plasma settings that live in state files rather than clean config:
+# taskbar apps with Meta+1..9, windows maximized by default, and the
+# half-screen split as the only tiling layout. Safe to re-run.
+set -euo pipefail
+
+# Pinned taskbar apps, in order. Meta+1 activates the first one and launches it
+# if it isn't running.
+LAUNCHERS=(
+    Alacritty.desktop
+    brave-browser.desktop
+    org.telegram.desktop.desktop
+    org.kde.okular.desktop
+    libreoffice-calc.desktop
+)
+
+# Qt key codes for kglobalaccel.
+META=$((0x10000000))
+KEY_UP=$((0x01000013))
+
+set_shortcut() {  # component, action, key codes...
+    local keys=""
+    for k in "${@:3}"; do keys+="([$k, 0, 0, 0],), "; done
+    gdbus call --session --dest org.kde.kglobalaccel --object-path /kglobalaccel \
+        --method org.kde.KGlobalAccel.setForeignShortcutKeys \
+        "['$1', '$2', '', '']" "@a(ai) [${keys%, }]" >/dev/null
+}
+
+# Taskbar launchers.
+js_list=$(printf '"applications:%s",' "${LAUNCHERS[@]}")
+qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+    panels().forEach(p => p.widgets('org.kde.plasma.icontasks').forEach(w => {
+        w.currentConfigGroup = ['General'];
+        w.writeConfig('launchers', [${js_list%,}]);
+        w.reloadConfig();
+    }));
+" >/dev/null
+
+# Meta+1..9 activate taskbar entries.
+for i in {1..9}; do
+    set_shortcut plasmashell "activate task manager entry $i" $((META + 0x30 + i))
+done
+
+# Two layouts only: Meta+Up maximizes, Meta+Left/Right tile to halves (KDE
+# default). Top/bottom tiling is unbound.
+set_shortcut kwin "Window Maximize" $((META + KEY_UP)) $((0x08000000 + 0x4D)) $((META + 0x01000016))
+set_shortcut kwin "Window Quick Tile Top"
+set_shortcut kwin "Window Quick Tile Bottom"
+
+# New normal windows open maximized. Dialogs keep their own size.
+rule=maximize-by-default
+kwriteconfig6 --file kwinrulesrc --group "$rule" --key Description "Maximize new windows"
+kwriteconfig6 --file kwinrulesrc --group "$rule" --key types 1
+kwriteconfig6 --file kwinrulesrc --group "$rule" --key maximizehoriz true
+kwriteconfig6 --file kwinrulesrc --group "$rule" --key maximizehorizrule 3
+kwriteconfig6 --file kwinrulesrc --group "$rule" --key maximizevert true
+kwriteconfig6 --file kwinrulesrc --group "$rule" --key maximizevertrule 3
+rules=$(kreadconfig6 --file kwinrulesrc --group General --key rules)
+case ",$rules," in
+    *",$rule,"*) ;;
+    *) rules="${rules:+$rules,}$rule" ;;
+esac
+kwriteconfig6 --file kwinrulesrc --group General --key rules "$rules"
+kwriteconfig6 --file kwinrulesrc --group General --key count "$(tr ',' '\n' <<<"$rules" | grep -c .)"
+
+# Custom tile layout (Meta+T, Shift+drag) is the same 50/50 split. KWin reads
+# this at login.
+grep -o '^\[Tiling\]\[[^=]*\]$' "${XDG_CONFIG_HOME:-$HOME/.config}/kwinrc" | while read -r header; do
+    groups=()
+    for g in $(grep -o '[^][]\+' <<<"$header"); do groups+=(--group "$g"); done
+    kwriteconfig6 --file kwinrc "${groups[@]}" --key tiles \
+        '{"layoutDirection":"horizontal","tiles":[{"width":0.5},{"width":0.5}]}'
+done
+
+qdbus6 org.kde.KWin /KWin reconfigure
