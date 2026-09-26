@@ -12,6 +12,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 | `alacritty` | Alacritty terminal (JetBrainsMono Nerd Font, black background)  |
 | `bash`      | `.bashrc` / `.bash_profile` — interactive terminals exec fish   |
 | `fish`      | fish shell with `eza` aliases and starship prompt               |
+| `gh`        | GitHub CLI settings and aliases (not `hosts.yml`, which holds the token) |
 | `git`       | Git identity, GPG commit signing, global ignore file            |
 | `kanata`    | Keyboard remapping: Caps Lock is Esc on tap, special layer on hold |
 | `neovim`    | Neovim with onedark; vim-plug installs itself on first start    |
