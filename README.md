@@ -16,6 +16,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 | `git`       | Git identity, GPG commit signing, global ignore file            |
 | `kanata`    | Keyboard remapping: Caps Lock is Esc on tap, special layer on hold |
 | `neovim`    | Neovim with onedark; vim-plug installs itself on first start    |
+| `pacman`    | Per-user `makepkg.conf` overrides (no debug packages, LTO)       |
 | `profile`   | `.profile` — `PATH`, `EDITOR` and XDG base directories          |
 | `starship`  | starship prompt colors                                          |
 | `systemd`   | User service for kanata                                         |
