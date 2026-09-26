@@ -28,7 +28,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 ## Requirements
 
 ```sh
-sudo pacman -S stow git fish starship eza fzf neovim tmux vifm alacritty wl-clipboard ttf-jetbrains-mono-nerd
+sudo pacman -S stow git github-cli fish starship eza fzf neovim tmux vifm alacritty wl-clipboard syncthing ttf-jetbrains-mono-nerd
 ```
 
 kanata is in the AUR as `kanata-bin`.
@@ -47,10 +47,10 @@ To link a single package, run `stow --no-folding --target="$HOME" <package>`.
 Existing files in `$HOME` are never overwritten. If stow reports a conflict,
 move the existing file away and run `make` again.
 
-Enable the kanata service after linking:
+Enable the user services after linking:
 
 ```sh
-systemctl --user enable --now kanata.service
+systemctl --user enable --now kanata.service syncthing.service
 ```
 
 ## Uninstall
