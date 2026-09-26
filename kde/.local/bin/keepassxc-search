@@ -1,0 +1,34 @@
+#!/bin/bash
+# Bring KeePassXC to the front with the search box focused. Bound to Meta+K by
+# kde-setup. Starts KeePassXC if it isn't running. Pressing Ctrl+F needs ydotoold
+# (ydotool.service), since Wayland doesn't let apps send keys to each other.
+set -euo pipefail
+
+if ! pgrep -xu "$USER" keepassxc >/dev/null; then
+    exec keepassxc
+fi
+
+# A second instance tells the running one to show its window, also when it's
+# hidden in the tray, and exits.
+keepassxc
+
+# KWin's focus stealing prevention may leave the window behind the current one,
+# so activate it through a KWin script.
+js=$(mktemp --suffix=.js)
+trap 'rm -f "$js"' EXIT
+cat >"$js" <<'EOF'
+for (const w of workspace.windowList()) {
+    if (w.desktopFileName === "org.keepassxc.KeePassXC" && w.normalWindow) {
+        w.minimized = false;
+        workspace.activeWindow = w;
+    }
+}
+EOF
+name=keepassxc-search
+qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.unloadScript "$name" >/dev/null
+id=$(qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.loadScript "$js" "$name")
+qdbus6 org.kde.KWin "/Scripting/Script$id" org.kde.kwin.Script.run
+sleep 0.2
+
+# Ctrl+F (KEY_LEFTCTRL=29, KEY_F=33).
+ydotool key 29:1 33:1 33:0 29:0 >/dev/null

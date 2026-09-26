@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=KeePassXC Search
+Comment=Bring KeePassXC to the front with the search box focused
+Exec=keepassxc-search
+Icon=keepassxc
+NoDisplay=true

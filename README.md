@@ -14,7 +14,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 | `fish`      | fish shell with `eza` aliases, `vim` → `nvim`, starship and fzf keys |
 | `gh`        | GitHub CLI settings and aliases (not `hosts.yml`, which holds the token) |
 | `git`       | Git identity, GPG commit signing, global ignore file            |
-| `kde`       | `kde-setup` script: Breeze Dark, Meta+1…9 app shortcuts, maximized windows, 50/50 split, keyboard layouts |
+| `kde`       | `kde-setup` script: Breeze Dark, Meta+1…9 app shortcuts, Meta+K KeePassXC search, maximized windows, 50/50 split, keyboard layouts |
 | `kanata`    | Keyboard remapping: Caps Lock is Esc on tap, special layer on hold |
 | `neovim`    | Neovim with onedark; vim-plug installs itself on first start    |
 | `pacman`    | Per-user `makepkg.conf` overrides (no debug packages, LTO)      |
@@ -29,7 +29,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 ## Requirements
 
 ```sh
-sudo pacman -S stow git github-cli fish starship eza fzf neovim tmux vifm alacritty wl-clipboard syncthing ttf-jetbrains-mono-nerd
+sudo pacman -S stow git github-cli fish starship eza fzf neovim tmux vifm alacritty wl-clipboard syncthing keepassxc ydotool ttf-jetbrains-mono-nerd
 ```
 
 kanata is in the AUR as `kanata-bin`.
@@ -51,7 +51,7 @@ move the existing file away and run `make` again.
 Enable the user services after linking:
 
 ```sh
-systemctl --user enable --now kanata.service syncthing.service
+systemctl --user enable --now kanata.service syncthing.service ydotool.service
 ```
 
 On KDE Plasma, apply the desktop settings (safe to re-run):
