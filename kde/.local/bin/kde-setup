@@ -106,13 +106,24 @@ esac
 kwriteconfig6 --file kwinrulesrc --group General --key rules "$rules"
 kwriteconfig6 --file kwinrulesrc --group General --key count "$(tr ',' '\n' <<<"$rules" | grep -c .)"
 
-# Custom tile layout (Meta+T, Shift+drag) is the same 50/50 split. KWin reads
-# this at login.
-grep -o '^\[Tiling\]\[[^=]*\]$' "${XDG_CONFIG_HOME:-$HOME/.config}/kwinrc" | while read -r header; do
-    groups=()
-    for g in $(grep -o '[^][]\+' <<<"$header"); do groups+=(--group "$g"); done
-    kwriteconfig6 --file kwinrc "${groups[@]}" --key tiles \
-        '{"layoutDirection":"horizontal","tiles":[{"width":0.5},{"width":0.5}]}'
-done
+# Custom tile layout (Meta+T, Shift+drag) is the same 50/50 split on every
+# screen and desktop. Set through a KWin script so it applies now, and KWin
+# saves it to kwinrc itself.
+tiles_js=$(mktemp --suffix=.js)
+trap 'rm -f "$tiles_js"' EXIT
+cat >"$tiles_js" <<'EOF'
+for (const output of workspace.screens) {
+    for (const desktop of workspace.desktops) {
+        const root = workspace.rootTile(output, desktop);
+        while (root.tiles.length > 2) root.tiles[root.tiles.length - 1].remove();
+        while (root.tiles.length < 2) root.split(1);
+        root.tiles[0].relativeGeometry = {x: 0, y: 0, width: 0.5, height: 1};
+    }
+}
+EOF
+id=$(qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.loadScript "$tiles_js" kde-setup-tiles)
+qdbus6 org.kde.KWin "/Scripting/Script$id" org.kde.kwin.Script.run
+sleep 1
+qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.unloadScript kde-setup-tiles >/dev/null
 
 qdbus6 org.kde.KWin /KWin reconfigure
