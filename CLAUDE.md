@@ -41,6 +41,10 @@ Stow only targets `$HOME`. System files (`/etc/...`) are not managed here.
   `README.md`. AUR packages get their own note, like kanata.
 - For user services, put units in `systemd/.config/systemd/user/`, then run
   `systemctl --user daemon-reload`.
+- Don't stow KDE rc files like `kwinrc`, `kglobalshortcutsrc` or the Plasma applet
+  config, because KDE keeps churning state in them. Add the setting to
+  `kde/.local/bin/kde-setup` instead: it applies settings through `kwriteconfig6` and
+  D-Bus, and it's safe to re-run.
 - Never track secrets: SSH keys, `gh/hosts.yml`, tokens, GPG material, anything with
   passwords. Check before adding files from a config directory.
 
