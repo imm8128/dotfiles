@@ -18,6 +18,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 | `neovim`    | Neovim with onedark; vim-plug installs itself on first start    |
 | `pacman`    | Per-user `makepkg.conf` overrides (no debug packages, LTO)       |
 | `profile`   | `.profile` — `PATH`, `EDITOR` and XDG base directories          |
+| `ssh`       | SSH client config (keys are not tracked)                        |
 | `starship`  | starship prompt colors                                          |
 | `systemd`   | User service for kanata                                         |
 | `tmux`      | tmux with `C-a` prefix and vi keys                              |
