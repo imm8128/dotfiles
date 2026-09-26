@@ -46,6 +46,16 @@ nnoremap <leader>wc :q<Enter>
 nnoremap <leader>e :e
 nnoremap <leader>f :Lexplore<Enter>
 
+" install vim-plug and missing plugins on first start
+let s:plug = stdpath('data') . '/site/autoload/plug.vim'
+if empty(glob(s:plug))
+  silent execute '!curl -fLo ' . shellescape(s:plug) . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  execute 'source ' . fnameescape(s:plug)
+endif
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
 call plug#begin()
 Plug 'joshdick/onedark.vim'
 call plug#end()

@@ -1,11 +1,10 @@
 {
-    "security.workspace.trust.untrustedFiles": "open",
     "editor.fontFamily": "'JetBrainsMono Nerd Font', 'monospace', monospace",
     "vim.insertModeKeyBindings": [
-     {
-         "before": ["j", "j"],
-         "after": ["<esc>"]
-     }
+        {
+            "before": ["j", "j"],
+            "after": ["<esc>"]
+        }
     ],
-    "dart.flutterSdkPath": "/home/admin1475963/Applications/flutter"
+    "dart.flutterSdkPath": "~/Applications/flutter"
 }
