@@ -67,16 +67,28 @@ set_shortcut kwin "Window Quick Tile Bottom"
 kwriteconfig6 --file kxkbrc --group Layout --key Use true
 kwriteconfig6 --file kxkbrc --group Layout --key LayoutList us,ru,uz
 kwriteconfig6 --file kcminputrc --group Keyboard --key NumLock 0
-dbus-send --session --type=signal /Layouts org.kde.keyboard.reloadConfig
-sleep 1  # let KWin register the per-layout shortcut actions
 
 # Keyboard layouts: Meta+Space cycles, Meta+Ctrl+Alt+Shift+A/S/D pick one directly.
+# KWin only binds a per-layout action that already exists in kglobalaccel, and on
+# a fresh config only the keyboard settings page creates them, so register them
+# here before reloading the layouts.
 HYPER=$((META + 0x04000000 + 0x08000000 + 0x02000000))
 layouts="KDE Keyboard Layout Switcher"
 set_shortcut "$layouts" "Switch to Next Keyboard Layout" $((META + 0x20))
-set_shortcut "$layouts" "Switch keyboard layout to English (US)" $((HYPER + 0x41))
-set_shortcut "$layouts" "Switch keyboard layout to Russian" $((HYPER + 0x53))
-set_shortcut "$layouts" "Switch keyboard layout to Uzbek" $((HYPER + 0x44))
+set_layout_shortcut() {  # layout name, key code
+    local action="Switch keyboard layout to $1"
+    gdbus call --session --dest org.kde.kglobalaccel --object-path /kglobalaccel \
+        --method org.kde.KGlobalAccel.doRegister \
+        "['$layouts', '$action', 'Keyboard Layout Switcher', '$action']" >/dev/null
+    set_shortcut "$layouts" "$action" "$2"
+}
+set_layout_shortcut "English (US)" $((HYPER + 0x41))
+set_layout_shortcut Russian $((HYPER + 0x53))
+set_layout_shortcut Uzbek $((HYPER + 0x44))
+# KWin reloads layouts on KConfig's change signal. kwriteconfig6 --notify skips
+# it when the value is unchanged, so send it directly.
+gdbus emit --session --object-path /kxkbrc --signal org.kde.kconfig.notify.ConfigChanged \
+    "{'Layout': [b'LayoutList']}"
 
 # New normal windows open maximized. Dialogs keep their own size.
 rule=maximize-by-default
