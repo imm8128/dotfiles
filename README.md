@@ -11,12 +11,12 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 |-------------|-----------------------------------------------------------------|
 | `alacritty` | Alacritty terminal (JetBrainsMono Nerd Font, black background)  |
 | `bash`      | `.bashrc` / `.bash_profile` — interactive terminals exec fish   |
-| `fish`      | fish shell with `eza` aliases and starship prompt               |
+| `fish`      | fish shell with `eza` aliases, `vim` → `nvim`, starship and fzf keys |
 | `gh`        | GitHub CLI settings and aliases (not `hosts.yml`, which holds the token) |
 | `git`       | Git identity, GPG commit signing, global ignore file            |
 | `kanata`    | Keyboard remapping: Caps Lock is Esc on tap, special layer on hold |
 | `neovim`    | Neovim with onedark; vim-plug installs itself on first start    |
-| `pacman`    | Per-user `makepkg.conf` overrides (no debug packages, LTO)       |
+| `pacman`    | Per-user `makepkg.conf` overrides (no debug packages, LTO)      |
 | `profile`   | `.profile` — `PATH`, `EDITOR` and XDG base directories          |
 | `ssh`       | SSH client config (keys are not tracked)                        |
 | `starship`  | starship prompt colors                                          |
@@ -28,7 +28,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 ## Requirements
 
 ```sh
-sudo pacman -S stow git fish starship eza neovim tmux vifm alacritty wl-clipboard ttf-jetbrains-mono-nerd
+sudo pacman -S stow git fish starship eza fzf neovim tmux vifm alacritty wl-clipboard ttf-jetbrains-mono-nerd
 ```
 
 kanata is in the AUR as `kanata-bin`.
