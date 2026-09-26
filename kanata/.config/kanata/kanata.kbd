@@ -3,7 +3,7 @@
 )
 
 (defalias
-    lspe (layer-while-held special)
+    lspe (tap-hold-press 200 200 esc (layer-while-held special))
     scsaa M-C-S-A-a
     scsas M-C-S-A-s
     scsad M-C-S-A-d
