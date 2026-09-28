@@ -1,8 +1,9 @@
 #!/bin/bash
 # Apply KDE Plasma settings that live in state files rather than clean config:
 # the Breeze Dark theme, default terminal, file dialog view, taskbar apps with
-# Meta+1..9, Meta+K for KeePassXC search, windows maximized by default, the
-# half-screen split as the only tiling layout, and keyboard input. Safe to re-run.
+# Meta+1..9, Meta+K for KeePassXC search, windows maximized by default except a
+# floating KCalc, the half-screen split as the only tiling layout, and keyboard
+# input. Safe to re-run.
 set -euo pipefail
 
 # Pinned taskbar apps, in order. Meta+1 activates the first one and launches it
@@ -13,6 +14,8 @@ LAUNCHERS=(
     org.telegram.desktop.desktop
     org.kde.okular.desktop
     libreoffice-calc.desktop
+    org.keepassxc.KeePassXC.desktop
+    org.kde.kcalc.desktop
 )
 
 # Qt key codes for kglobalaccel.
@@ -101,21 +104,35 @@ set_layout_shortcut Uzbek $((HYPER + 0x44))
 gdbus emit --session --object-path /kxkbrc --signal org.kde.kconfig.notify.ConfigChanged \
     "{'Layout': [b'LayoutList']}"
 
+# Window rules. For each property KWin uses the first matching rule in the list,
+# so exceptions go before the catch-all. Rules added in System Settings stay
+# ahead of these.
+set_rule() {  # rule, key=value...
+    for kv in "${@:2}"; do
+        kwriteconfig6 --file kwinrulesrc --group "$1" --key "${kv%%=*}" "${kv#*=}"
+    done
+}
+
+# KCalc opens floating: normal size, centered on the screen. Placement 5 is
+# Centered, rule 2 forces it and 3 applies it once.
+set_rule kcalc-floating Description="KCalc floating" \
+    wmclass=org.kde.kcalc wmclassmatch=1 \
+    maximizehoriz=false maximizehorizrule=3 maximizevert=false maximizevertrule=3 \
+    placement=5 placementrule=2
+
 # New normal windows open maximized. Dialogs keep their own size.
-rule=maximize-by-default
-kwriteconfig6 --file kwinrulesrc --group "$rule" --key Description "Maximize new windows"
-kwriteconfig6 --file kwinrulesrc --group "$rule" --key types 1
-kwriteconfig6 --file kwinrulesrc --group "$rule" --key maximizehoriz true
-kwriteconfig6 --file kwinrulesrc --group "$rule" --key maximizehorizrule 3
-kwriteconfig6 --file kwinrulesrc --group "$rule" --key maximizevert true
-kwriteconfig6 --file kwinrulesrc --group "$rule" --key maximizevertrule 3
-rules=$(kreadconfig6 --file kwinrulesrc --group General --key rules)
-case ",$rules," in
-    *",$rule,"*) ;;
-    *) rules="${rules:+$rules,}$rule" ;;
-esac
-kwriteconfig6 --file kwinrulesrc --group General --key rules "$rules"
-kwriteconfig6 --file kwinrulesrc --group General --key count "$(tr ',' '\n' <<<"$rules" | grep -c .)"
+set_rule maximize-by-default Description="Maximize new windows" types=1 \
+    maximizehoriz=true maximizehorizrule=3 maximizevert=true maximizevertrule=3
+
+own_rules=(kcalc-floating maximize-by-default)
+IFS=, read -ra existing <<<"$(kreadconfig6 --file kwinrulesrc --group General --key rules)"
+rules=()
+for r in "${existing[@]}"; do
+    [[ " ${own_rules[*]} " == *" $r "* ]] || rules+=("$r")
+done
+rules+=("${own_rules[@]}")
+kwriteconfig6 --file kwinrulesrc --group General --key rules "$(IFS=,; echo "${rules[*]}")"
+kwriteconfig6 --file kwinrulesrc --group General --key count "${#rules[@]}"
 
 # Custom tile layout (Meta+T, Shift+drag) is the same 50/50 split on every
 # screen and desktop. Set through a KWin script so it applies now, and KWin
