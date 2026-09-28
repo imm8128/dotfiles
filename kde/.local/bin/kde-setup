@@ -1,9 +1,8 @@
 #!/bin/bash
 # Apply KDE Plasma settings that live in state files rather than clean config:
 # the Breeze Dark theme, default terminal, file dialog view, taskbar apps with
-# Meta+1..9, Meta+K for KeePassXC search, windows maximized by default except a
-# floating KCalc, the half-screen split as the only tiling layout, and keyboard
-# input. Safe to re-run.
+# Meta+1..9, windows maximized by default except a floating KCalc, the
+# half-screen split as the only tiling layout, and keyboard input. Safe to re-run.
 set -euo pipefail
 
 # Pinned taskbar apps, in order. Meta+1 activates the first one and launches it
@@ -57,17 +56,6 @@ qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
 for i in {1..9}; do
     set_shortcut plasmashell "activate task manager entry $i" $((META + 0x30 + i))
 done
-
-# Meta+K brings KeePassXC to the front with the search box focused. Like the
-# Shortcuts settings page, register a dummy action so kglobalaccel reads the
-# .desktop file and creates the launch action, then drop the dummy.
-kpx=keepassxc-search.desktop
-for method in doRegister setInactive; do
-    gdbus call --session --dest org.kde.kglobalaccel --object-path /kglobalaccel \
-        --method "org.kde.KGlobalAccel.$method" \
-        "['$kpx', '', 'KeePassXC Search', '']" >/dev/null
-done
-set_shortcut "$kpx" _launch $((META + 0x4B))
 
 # Two layouts only: Meta+M (and the default Meta+PgUp) maximizes, Meta+Left/Right
 # tile to halves (KDE default). Top/bottom tiling is unbound, so Meta+Up and
