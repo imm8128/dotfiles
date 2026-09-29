@@ -29,7 +29,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 ## Requirements
 
 ```sh
-sudo pacman -S stow git github-cli fish starship eza fzf neovim tmux vifm alacritty wl-clipboard syncthing keepassxc kcalc ttf-jetbrains-mono-nerd
+sudo pacman -S stow git github-cli fish starship eza fzf neovim tmux vifm alacritty wl-clipboard syncthing keepassxc kcalc mise sops age ttf-jetbrains-mono-nerd
 ```
 
 kanata is in the AUR as `kanata-bin`.
