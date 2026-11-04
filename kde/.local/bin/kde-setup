@@ -11,10 +11,10 @@ LAUNCHERS=(
     Alacritty.desktop
     brave-browser.desktop
     org.telegram.desktop.desktop
-    org.kde.okular.desktop
-    libreoffice-calc.desktop
     org.keepassxc.KeePassXC.desktop
     org.kde.kcalc.desktop
+    libreoffice-calc.desktop
+    org.kde.okular.desktop
 )
 
 # Qt key codes for kglobalaccel.
