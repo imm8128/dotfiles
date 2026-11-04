@@ -60,6 +60,21 @@ On KDE Plasma, apply the desktop settings (safe to re-run):
 kde-setup
 ```
 
+## System setup
+
+Stow doesn't manage files outside `$HOME`, so run these once per install.
+
+Swap: a 16 GB swap file on `/`, so large builds like Flutter's Gradle don't get
+killed for running out of memory. `/` is on the encrypted volume, so the swap is
+encrypted too.
+
+```sh
+sudo mkswap --file --size 16G /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab
+sudo systemctl daemon-reload
+```
+
 ## Uninstall
 
 ```sh
