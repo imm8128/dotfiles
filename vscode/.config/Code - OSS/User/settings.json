@@ -6,5 +6,8 @@
             "after": ["<esc>"]
         }
     ],
-    "dart.flutterSdkPath": "~/Applications/flutter"
+    "dart.getFlutterSdkCommand": {
+        "executable": "mise",
+        "args": ["where", "flutter"]
+    }
 }
