@@ -6,7 +6,6 @@ add_path() {
 }
 
 add_path "$HOME/.local/bin"
-add_path "$HOME/Applications/flutter/bin"
 add_path "$HOME/.local/share/mise/shims"
 unset -f add_path
 
