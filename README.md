@@ -25,6 +25,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 | `tmux`      | tmux with `C-a` prefix and vi keys                              |
 | `vifm`      | vifm file manager                                               |
 | `vscode`    | Code - OSS user settings                                        |
+| `xkb`       | `ru_uz` keyboard layout: Russian with ў қ ғ ҳ on AltGr+у/к/г/х  |
 
 ## Requirements
 
@@ -54,7 +55,8 @@ Enable the user services after linking:
 systemctl --user enable --now kanata.service syncthing.service
 ```
 
-On KDE Plasma, apply the desktop settings (safe to re-run):
+On KDE Plasma, log out and back in once so KWin picks up the `ru_uz` layout from
+`~/.config/xkb`, then apply the desktop settings (safe to re-run):
 
 ```sh
 kde-setup

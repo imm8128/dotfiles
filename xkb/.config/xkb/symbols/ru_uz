@@ -1,0 +1,22 @@
+// Russian with the Uzbek Cyrillic letters on AltGr (Right Alt), so one layout
+// covers both languages instead of switching to the uz layout for four letters.
+// The letters sit on their Russian base letters:
+//
+//   AltGr+у → ў   AltGr+к → қ   AltGr+г → ғ   AltGr+х → ҳ   (add Shift for capitals)
+//
+// Everything else is the stock Russian layout. Built the same way as
+// xkeyboard-config's ru(rtu) ("Russian (plus Tatar letters)"). libxkbcommon finds
+// this file through ~/.config/xkb, and the layout is selected by its file name.
+
+default partial alphanumeric_keys
+xkb_symbols "basic" {
+    include "ru"
+    name[Group1]= "Russian (plus Uzbek letters)";
+
+    key <AD03> { [ NoSymbol, NoSymbol,   Byelorussian_shortu,   Byelorussian_SHORTU ] };
+    key <AD04> { [ NoSymbol, NoSymbol, Cyrillic_ka_descender, Cyrillic_KA_descender ] };
+    key <AD07> { [ NoSymbol, NoSymbol,      Cyrillic_ghe_bar,      Cyrillic_GHE_bar ] };
+    key <AD11> { [ NoSymbol, NoSymbol, Cyrillic_ha_descender, Cyrillic_HA_descender ] };
+
+    include "level3(ralt_switch)"
+};
