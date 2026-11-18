@@ -4,6 +4,9 @@
 //
 //   AltGr+у → ў   AltGr+к → қ   AltGr+г → ғ   AltGr+х → ҳ   (add Shift for capitals)
 //
+// Caps+у/к/г/х type them too: kanata sends Right Alt+key (see kanata.kbd), so
+// Right Alt must stay the level-3 shift here.
+//
 // Everything else is the stock Russian layout. Built the same way as
 // xkeyboard-config's ru(rtu) ("Russian (plus Tatar letters)"). libxkbcommon finds
 // this file through ~/.config/xkb, and the layout is selected by its file name.

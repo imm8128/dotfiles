@@ -15,7 +15,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 | `gh`        | GitHub CLI settings and aliases (not `hosts.yml`, which holds the token) |
 | `git`       | Git identity (iSell email under ~/Projects/work/isell), GPG signing, global ignore |
 | `kde`       | `kde-setup` script: Breeze Dark, Meta+1…9 app shortcuts, maximized windows (KCalc floats), 50/50 split, keyboard layouts |
-| `kanata`    | Keyboard remapping: Caps Lock is Esc on tap, special layer on hold |
+| `kanata`    | Keyboard remapping: Caps Lock is Esc on tap, special layer on hold (Caps+у/к/г/х types ў қ ғ ҳ) |
 | `neovim`    | Neovim with onedark; vim-plug installs itself on first start    |
 | `pacman`    | Per-user `makepkg.conf` overrides (no debug packages, LTO)      |
 | `profile`   | `.profile` — `PATH`, `EDITOR` and XDG base directories          |
@@ -25,7 +25,7 @@ For example, `tmux/.config/tmux/tmux.conf` is linked to `~/.config/tmux/tmux.con
 | `tmux`      | tmux with `C-a` prefix and vi keys                              |
 | `vifm`      | vifm file manager                                               |
 | `vscode`    | Code - OSS user settings                                        |
-| `xkb`       | `ru_uz` keyboard layout: Russian with ў қ ғ ҳ on AltGr+у/к/г/х  |
+| `xkb`       | `ru_uz` keyboard layout: Russian with ў қ ғ ҳ on AltGr+у/к/г/х (or Caps+у/к/г/х through kanata) |
 
 ## Requirements
 

@@ -28,12 +28,15 @@
     z     x     c     v     b     n     m     ,     .     /
 )
 
+;; Caps+у/к/г/х type ў қ ғ ҳ in ru_uz (add Shift for capitals): Right Alt is
+;; AltGr there. In the us layout Right Alt is plain Alt, so they send Alt+E/R/U/[.
+;; Caps+L reloads this config.
 (deflayer special
     _
     _
     _
     _     _     _     _     _     _     _     _     _     _
-    esc   _     C-spc lrld  _     _     _     _     _     _     _     _     _
-    @scsaa @scsas _     _     _     _     _     _     _     _     _
+    esc   _     RA-e  RA-r  _     _     RA-u  _     _     _     RA-[  _     _
+    @scsaa @scsas _     _     _     _     _     _     lrld  _     _
     _     _     _     _     _     _     _     _     _     _
 )
