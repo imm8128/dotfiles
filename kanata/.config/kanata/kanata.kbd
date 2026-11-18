@@ -2,16 +2,35 @@
     process-unmapped-keys yes
 )
 
+;; Left Ctrl+Left Alt+key sends Right Alt+key, which is AltGr in ru_uz. XKB takes
+;; only one key as the level-3 shift, hence the swap. It checks the physical
+;; keys, so the remapped Right Alt below (sent as Left Alt) doesn't trigger it.
+(deftemplate altgr (key)
+    (switch
+        ((and (input real lctl) (input real lalt))) (unmod (lctl lalt) ralt $key) break
+        () $key break)
+)
+
 (defalias
     lspe (tap-hold-press 200 200 esc (layer-while-held special))
     scsaa M-C-S-A-a
     scsas M-C-S-A-s
+
+    ;; Uzbek letters of the ru_uz layout (add Shift for capitals):
+    ;; Ctrl+Alt+у → ў, к → қ, г → ғ, х → ҳ. In the us layout Right Alt is plain
+    ;; Alt, so there Ctrl+Alt+E/R/U/[ arrive as Alt+E/R/U/[. Ctrl+Alt on these
+    ;; keys was free in KDE (checked 2026-11-18); Meta+E/R and Caps+E/R were taken.
+    uzo (t! altgr e)
+    uzq (t! altgr r)
+    uzg (t! altgr u)
+    uzh (t! altgr [)
 )
 
 (defsrc
     caps
     ret
     spc
+    ralt
     1     2     3     4     5     6     7     8     9     0
     q     w     e     r     t     y     u     i     o     p     [     ]     \
     a     s     d     f     g     h     j     k     l     ;     '
@@ -22,13 +41,16 @@
     @lspe
     ret
     spc
-    1     2     3     4     5     6     7     8     9     0
-    q     w     e     r     t     y     u     i     o     p     [     ]     \
+    ;; Right Alt is plain Alt, so AltGr is reached only through @uzo and friends.
+    lalt
+    1    2     3     4     5     6     7     8     9     0
+    q     w     @uzo  @uzq  t     y     @uzg  i     o     p     @uzh  ]     \
     a     s     d     f     g     h     j     k     l     ;     '
     z     x     c     v     b     n     m     ,     .     /
 )
 
 (deflayer special
+    _
     _
     _
     _

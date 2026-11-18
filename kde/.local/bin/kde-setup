@@ -65,8 +65,8 @@ set_shortcut kwin "Window Quick Tile Top"
 set_shortcut kwin "Window Quick Tile Bottom"
 
 # Input: us and ru_uz layouts, and NumLock on at login (0 = on, 1 = off,
-# 2 = leave unchanged). ru_uz is Russian with ў қ ғ ҳ on AltGr, from the xkb
-# package. The tray labels it "ru". KWin only searches ~/.config/xkb if it
+# 2 = leave unchanged). ru_uz is Russian with ў қ ғ ҳ on Left Ctrl+Alt (through
+# kanata), from the xkb package. The tray labels it "ru". KWin only searches ~/.config/xkb if it
 # existed when KWin started, so after stowing xkb for the first time, log out and
 # back in before running this, or KWin falls back to us alone.
 kwriteconfig6 --file kxkbrc --group Layout --key Use true
