@@ -2,7 +2,8 @@
 # Apply KDE Plasma settings that live in state files rather than clean config:
 # the Breeze Dark theme, default terminal, file dialog view, taskbar apps with
 # Meta+1..9, windows maximized by default except a floating KCalc, the
-# half-screen split as the only tiling layout, and keyboard input. Safe to re-run.
+# half-screen split as the only tiling layout, keyboard input, and no Baloo file
+# indexing. Safe to re-run.
 set -euo pipefail
 
 # Pinned taskbar apps, in order. Meta+1 activates the first one and launches it
@@ -41,6 +42,11 @@ kwriteconfig6 --file kdeglobals --group General --key TerminalService Alacritty.
 # Open/save dialogs show hidden files in the detailed tree view.
 kwriteconfig6 --file kdeglobals --group "KFileDialog Settings" --key "Show hidden files" true
 kwriteconfig6 --file kdeglobals --group "KFileDialog Settings" --key "View Style" DetailTree
+
+# Baloo file indexing off. Its index reached 2G on a full /home, mostly from
+# the photo folders. disable also stops a running indexer. Delete an existing
+# index with `balooctl6 purge`.
+balooctl6 disable >/dev/null
 
 # Taskbar launchers.
 js_list=$(printf '"applications:%s",' "${LAUNCHERS[@]}")
