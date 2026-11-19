@@ -11,8 +11,10 @@ it should end up tracked here.
 - AUR helper: `yay`. Current AUR packages: `pacman -Qm`.
 - Filesystems are ext4 (`/`, `/home`, `/boot`, `/boot/efi`) and there are **no snapshots**.
   A broken upgrade, initramfs or bootloader cannot be rolled back easily.
-- `sudo` needs a password, so Claude can't run it directly. Give the user the exact
-  command to run as `! sudo …` in the prompt and explain what it does first.
+- `sudo` needs a password, so Claude can't run it directly. Explain what the command
+  does, then give the user the exact command to run in a separate terminal (Konsole).
+  Not as `! sudo …`: the `!` prompt has no TTY, so sudo can't ask for the password
+  and pacman's [Y/n] prompts can't be answered.
 - Login shell is bash, and interactive terminals exec fish. `PATH`, `EDITOR` and the
   XDG variables are set in `profile/.profile`.
 
